@@ -1,0 +1,51 @@
+{% extends "django_deepface/base.html" %}
+
+{% block title %}DeepFace Login Demo{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">DeepFace Login Demo</h1>
+
+                    <div class="card-text">
+                        <h4>Welcome to the DeepFace Authentication Demo</h4>
+                        <p class="lead">
+                            This application demonstrates the integration of facial recognition technology for user
+                            authentication using the DeepFace library.
+                        </p>
+
+                        <h5 class="mt-4">Key Features:</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">✨ Face-based login authentication</li>
+                            <li class="mb-2">📸 Multiple face image support for improved accuracy</li>
+                            <li class="mb-2">🔒 Secure face embedding storage using pgvector</li>
+                            <li class="mb-2">📱 Webcam capture support for easy face registration</li>
+                        </ul>
+
+                        <h5 class="mt-4">How It Works:</h5>
+                        <p>
+                            The system uses DeepFace's facial recognition capabilities to create unique face embeddings
+                            for each user.
+                            These embeddings are stored securely in a PostgreSQL database using pgvector for efficient
+                            similarity searches.
+                            When logging in, the system compares your face against stored embeddings to authenticate
+                            your identity.
+                        </p>
+
+                        <div class="text-center mt-4">
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'django_deepface:profile' %}" class="btn btn-primary">Go to Profile</a>
+                            {% else %}
+                            <a href="{% url 'django_deepface:login' %}" class="btn btn-primary">Try Face Login</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

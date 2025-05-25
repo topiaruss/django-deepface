@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+recursive-include django_deepface/templates *
+recursive-include django_deepface/static *
+recursive-include django_deepface/management *
+recursive-include django_deepface/migrations *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+global-exclude .DS_Store 

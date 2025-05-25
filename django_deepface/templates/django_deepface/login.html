@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Login</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="login-form">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            <input type="text" name="username" id="id_username" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            <input type="password" name="password" id="id_password" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="use_face_login" id="id_use_face_login"
+                                    class="form-check-input">
+                                <label for="id_use_face_login" class="form-check-label">Use Face Login</label>
+                            </div>
+                        </div>
+
+                        <div id="webcam-container" class="mb-3" style="display: none;">
+                            <div class="video-container">
+                                <video id="webcam" autoplay playsinline width="100%" height="auto"></video>
+                                <canvas id="canvas" style="display: none;"></canvas>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" id="capture-btn" class="btn btn-primary">Capture Image</button>
+                                <button type="button" id="retake-btn" class="btn btn-secondary"
+                                    style="display: none;">Retake</button>
+                            </div>
+                            <input type="file" name="face_image" id="face_image" accept="image/*"
+                                style="display: none;">
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const webcamContainer = document.getElementById('webcam-container');
+        const useFaceLogin = document.getElementById('id_use_face_login');
+        const webcam = document.getElementById('webcam');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('capture-btn');
+        const retakeBtn = document.getElementById('retake-btn');
+        const faceImageInput = document.getElementById('face_image');
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('id_password');
+        const usernameInput = document.getElementById('id_username');
+        const loginButton = document.querySelector('button[type="submit"]');
+        let stream = null;
+        let imageCaptured = false;
+
+        // Function to update login button state
+        function updateLoginButtonState() {
+            if (useFaceLogin.checked) {
+                // Face login mode: require username and captured image
+                loginButton.disabled = !usernameInput.value || !imageCaptured;
+            } else {
+                // Password login mode: require username and password
+                loginButton.disabled = !usernameInput.value || !passwordInput.value;
+            }
+        }
+
+        // Add event listeners to inputs
+        usernameInput.addEventListener('input', updateLoginButtonState);
+        passwordInput.addEventListener('input', updateLoginButtonState);
+
+        // Toggle webcam container visibility and password requirement
+        useFaceLogin.addEventListener('change', function () {
+            if (this.checked) {
+                webcamContainer.style.display = 'block';
+                passwordInput.removeAttribute('required');  // Remove required when using face login
+                passwordInput.value = '';  // Clear password field
+                startWebcam();
+            } else {
+                webcamContainer.style.display = 'none';
+                passwordInput.setAttribute('required', '');  // Add required back for password login
+                stopWebcam();
+                imageCaptured = false;  // Reset image captured state
+            }
+            updateLoginButtonState();
+        });
+
+        // Start webcam
+        async function startWebcam() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'user',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                });
+                webcam.srcObject = stream;
+            } catch (err) {
+                console.error('Error accessing webcam:', err);
+                alert('Error accessing webcam. Please make sure you have granted camera permissions.');
+                useFaceLogin.checked = false;
+                webcamContainer.style.display = 'none';
+            }
+        }
+
+        // Stop webcam
+        function stopWebcam() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                webcam.srcObject = null;
+            }
+        }
+
+        // Capture image
+        captureBtn.addEventListener('click', function () {
+            canvas.width = webcam.videoWidth;
+            canvas.height = webcam.videoHeight;
+            canvas.getContext('2d').drawImage(webcam, 0, 0);
+
+            // Convert canvas to blob
+            canvas.toBlob(function (blob) {
+                // Create a new File object
+                const file = new File([blob], 'face.jpg', { type: 'image/jpeg' });
+
+                // Create a new FileList-like object
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+
+                // Set the files property of the input
+                faceImageInput.files = dataTransfer.files;
+
+                // Log to verify the file was set
+                console.log('Face image captured:', faceImageInput.files[0]);
+
+                imageCaptured = true;  // Set image captured state
+                updateLoginButtonState();  // Update button state
+            }, 'image/jpeg', 0.95);
+
+            // Show retake button
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline-block';
+        });
+
+        // Retake photo
+        retakeBtn.addEventListener('click', function () {
+            captureBtn.style.display = 'inline-block';
+            retakeBtn.style.display = 'none';
+            faceImageInput.value = '';
+            imageCaptured = false;  // Reset image captured state
+            updateLoginButtonState();  // Update button state
+        });
+
+        // Form submission validation
+        loginForm.addEventListener('submit', function (e) {
+            if (useFaceLogin.checked && !faceImageInput.files.length) {
+                e.preventDefault();
+                alert('Please capture a face image before submitting.');
+            }
+        });
+
+        // Initial button state
+        updateLoginButtonState();
+
+        // Clean up webcam when leaving page
+        window.addEventListener('beforeunload', function () {
+            stopWebcam();
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "django_deepface/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Face Profile Management</h2>
+    <p class="text-muted">Upload up to 4 different face images for better recognition accuracy.</p>
+
+    <!-- Display existing face images -->
+    <div class="mb-4">
+        <h4 class="mb-3">Your Stored Face Images</h4>
+        {% if face_images %}
+        <div class="row">
+            {% for identity in face_images %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="position-relative">
+                        <img src="{{ identity.image.url }}" class="card-img-top p-2"
+                            alt="Face image {{ identity.image_number }}" style="height: 200px; object-fit: cover;">
+                        <form method="post" action="{% url 'django_deepface:delete_face' identity.id %}"
+                            class="position-absolute bottom-0 end-0 m-2">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this face image?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Image {{ identity.image_number }}</h5>
+                        <p class="card-text text-muted">
+                            <small>Uploaded: {{ identity.created_at|date:"F j, Y" }}</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> You haven't uploaded any face images yet. Upload your first face image
+            below.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Upload form -->
+    {% if face_images|length < 4 %} <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Upload New Face Image</h5>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    You have reached the maximum number of face images (4).
+</div>
+{% endif %}
+</div>
+
+<!-- Webcam capture -->
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Capture from Webcam</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <video id="webcam" class="img-fluid rounded" autoplay playsinline></video>
+                <div class="mt-2">
+                    <button id="captureBtn" class="btn btn-primary">Capture</button>
+                    <button id="retakeBtn" class="btn btn-secondary" style="display: none;">Retake</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <canvas id="canvas" class="img-fluid rounded" style="display: none;"></canvas>
+                <form id="captureForm" method="post" enctype="multipart/form-data" style="display: none;">
+                    {% csrf_token %}
+                    <input type="file" name="image" id="capturedImage" accept="image/*">
+                    <button type="submit" class="btn btn-success mt-2">Save Captured Image</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const retakeBtn = document.getElementById('retakeBtn');
+        const captureForm = document.getElementById('captureForm');
+        const capturedImageInput = document.getElementById('capturedImage');
+        const ctx = canvas.getContext('2d');
+
+        // Request webcam access
+        async function setupCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    }
+                });
+                video.srcObject = stream;
+
+                // Wait for video to be ready
+                video.onloadedmetadata = function () {
+                    // Set canvas size to match video aspect ratio
+                    const aspectRatio = video.videoWidth / video.videoHeight;
+                    canvas.width = 640;
+                    canvas.height = canvas.width / aspectRatio;
+                };
+            } catch (err) {
+                console.error('Error accessing webcam:', err);
+                alert('Error accessing webcam. Please make sure you have granted camera permissions.');
+            }
+        }
+
+        // Capture image
+        captureBtn.addEventListener('click', function () {
+            // Draw current video frame to canvas maintaining aspect ratio
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert canvas to blob
+            canvas.toBlob(function (blob) {
+                // Create a File object from the blob
+                const file = new File([blob], 'captured_face.jpg', { type: 'image/jpeg' });
+
+                // Create a new FileList-like object
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+
+                // Set the file input value
+                capturedImageInput.files = dataTransfer.files;
+
+                // Show canvas and form
+                canvas.style.display = 'block';
+                video.style.display = 'none';
+                captureBtn.style.display = 'none';
+                retakeBtn.style.display = 'inline-block';
+                captureForm.style.display = 'block';
+            }, 'image/jpeg', 0.95);
+        });
+
+        // Retake photo
+        retakeBtn.addEventListener('click', function () {
+            canvas.style.display = 'none';
+            video.style.display = 'block';
+            captureBtn.style.display = 'inline-block';
+            retakeBtn.style.display = 'none';
+            captureForm.style.display = 'none';
+        });
+
+        // Initialize camera
+        setupCamera();
+    });
+</script>
+{% endblock %}
+{% endblock %}
