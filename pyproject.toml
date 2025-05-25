@@ -57,6 +57,9 @@ Documentation = "https://django-deepface.readthedocs.io"
 Repository = "https://github.com/topiaruss/django-deepface"
 Issues = "https://github.com/topiaruss/django-deepface/issues"
 
+[tool.setuptools]
+package-data = { "django_deepface" = ["templates/**/*.html"] }
+
 [tool.black]
 line-length = 88
 target-version = ['py38', 'py39', 'py310', 'py311']

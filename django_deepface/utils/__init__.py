@@ -1,17 +1,13 @@
-"""Utility functions for django-deepface.
+"""Utility functions for django-deepface."""
 
-This module is kept for backward compatibility.
-New code should import directly from django_deepface.utils.* modules.
-"""
-
-from .utils.face_processing import (
+from .face_processing import (
     process_face_image,
     get_deepface_settings,
     get_max_faces_per_user,
     get_similarity_threshold,
 )
-from .utils.file_handling import save_temp_file, cleanup_temp_file
-from .utils.validation import (
+from .file_handling import save_temp_file, cleanup_temp_file
+from .validation import (
     validate_face_embedding,
     validate_similarity_score,
     is_match,
