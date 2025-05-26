@@ -1,18 +1,20 @@
-"""Django settings for testing."""
+"""Test settings for django_deepface."""
 
 import os
 from pathlib import Path
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-test-key-not-for-production"  # nosec
+SECRET_KEY = "django-insecure-test-key-not-for-production"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]  # Allow all hosts in test environment
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -40,7 +42,7 @@ ROOT_URLCONF = "django_deepface.tests.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -53,21 +55,19 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "django_deepface.wsgi.application"
+WSGI_APPLICATION = "django_deepface.tests.wsgi.application"
 
 # Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("TEST_DB_NAME", "deepface_test"),
-        "USER": os.getenv("TEST_DB_USER", "postgres"),
-        "PASSWORD": os.getenv("TEST_DB_PASSWORD", "test"),
-        "HOST": os.getenv("TEST_DB_HOST", "127.0.0.1"),
-        "PORT": os.getenv("TEST_DB_PORT", "5432"),
-    },
+    "default": dj_database_url.config(
+        default="postgresql://postgres:test@localhost:5432/deepface_test",
+        conn_max_age=600,
+    )
 }
 
 # Password validation
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -84,12 +84,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
+# https://docs.djangoproject.com/en/5.2/topics/i18n/
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.2/howto/static-files/
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
@@ -98,16 +100,20 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# DeepFace specific settings
+# DeepFace settings
 DJANGO_DEEPFACE = {
     "MAX_FACE_IMAGES": 4,
-    "FACE_DETECTION_BACKEND": "opencv",
+    "FACE_DETECTION_BACKEND": "retinaface",
     "FACE_RECOGNITION_MODEL": "VGG-Face",
-    "FACE_RECOGNITION_METRIC": "cosine",
-    "FACE_RECOGNITION_DISTANCE_THRESHOLD": 0.4,
-    "FACE_DETECTION_MIN_CONFIDENCE": 0.9,
+    "FACE_RECOGNITION_DISTANCE_METRIC": "cosine",
+    "FACE_RECOGNITION_THRESHOLD": 0.4,
+    "FACE_VERIFICATION_BACKEND": "retinaface",
+    "FACE_VERIFICATION_MODEL": "VGG-Face",
+    "FACE_VERIFICATION_DISTANCE_METRIC": "cosine",
+    "FACE_VERIFICATION_THRESHOLD": 0.4,
 }
 
 # Create media and static directories if they don't exist
