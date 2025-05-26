@@ -35,4 +35,4 @@ clean:
 init: clean
 	uv pip install -e .
 	uv pip install pytest pytest-django pytest-cov
-	make db-migrate 
+	make db-migrate

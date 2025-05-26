@@ -23,5 +23,5 @@ repos:
     rev: 1.7.5
     hooks:
       - id: bandit
-        args: ["-r", "django_deepface"]
+        args: ["-r", "django_deepface", "-c", "pyproject.toml"]
         exclude: "tests/"
