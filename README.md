@@ -4,7 +4,7 @@ A Django app for face recognition authentication using DeepFace and pgvector.
 
 [![PyPI version](https://badge.fury.io/py/django-deepface.svg)](https://badge.fury.io/py/django-deepface)
 [![Python Support](https://img.shields.io/pypi/pyversions/django-deepface.svg)](https://pypi.org/project/django-deepface/)
-[![Django Support](https://img.shields.io/badge/django-4.0%20%7C%204.1%20%7C%204.2%20%7C%205.0-blue)](https://www.djangoproject.com/)
+[![Django Support](https://img.shields.io/badge/django-4.2%20%7C%205.0%20%7C%205.1-blue)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AI-assisted](https://img.shields.io/badge/code%20origin-AI--assisted-blueviolet)](#ai-generated-code-disclosure)
 
@@ -21,14 +21,18 @@ A Django app for face recognition authentication using DeepFace and pgvector.
 ## Requirements
 
 - Python 3.8+
-- Django 4.0+
+- Django 4.2+
 - PostgreSQL with pgvector extension
 - A working webcam (for face capture features)
 
 ## Installation
 
-1. Install the package:
+1. Install the package (recommended with uv):
 ```bash
+# Using uv (recommended)
+uv pip install django-deepface
+
+# Or using pip
 pip install django-deepface
 ```
 
@@ -37,12 +41,23 @@ pip install django-deepface
 # On Ubuntu/Debian
 sudo apt-get update
 sudo apt-get install -y libgl1-mesa-glx libglib2.0-0
+sudo apt-get install -y libhdf5-dev libhdf5-serial-dev
+sudo apt-get install -y python3-h5py
+sudo apt-get install -y libopenblas-dev
 
 # On macOS
 brew install cmake
+brew install hdf5
 ```
 
-3. Set up PostgreSQL with pgvector:
+3. Install tf-keras (required for TensorFlow 2.19.0+):
+```bash
+uv pip install tf-keras
+# or
+pip install tf-keras
+```
+
+4. Set up PostgreSQL with pgvector:
 ```bash
 # Install pgvector extension
 sudo apt-get install postgresql-14-pgvector  # Adjust version as needed
@@ -191,8 +206,10 @@ cd django-deepface
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install development dependencies
+# Install development dependencies (recommended with uv)
 uv pip install -e ".[dev]"
+# or
+pip install -e ".[dev]"
 
 # Run tests
 pytest
@@ -211,7 +228,7 @@ pytest
 pytest --cov=django_deepface --cov-report=html
 
 # Run specific test
-pytest tests/test_views.py::TestFaceLoginView
+pytest django_deepface/tests/test_views.py::TestProfileView
 ```
 
 ## Contributing
@@ -254,4 +271,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Documentation: [https://django-deepface.readthedocs.io](https://django-deepface.readthedocs.io)
 - Issues: [https://github.com/topiaruss/django-deepface/issues](https://github.com/topiaruss/django-deepface/issues)
-- Discussions: [https://github.com/topiaruss/django-deepface/discussions](https://github.com/topiaruss/django-deepface/discus
+- Discussions: [https://github.com/topiaruss/django-deepface/discussions](https://github.com/topiaruss/django-deepface/discussions)
+- PyPI: [https://pypi.org/project/django-deepface/](https://pypi.org/project/django-deepface/)
