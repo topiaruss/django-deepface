@@ -8,7 +8,11 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", TemplateView.as_view(template_name="django_deepface/index.html"), name="index"),
+    path(
+        "",
+        TemplateView.as_view(template_name="django_deepface/index.html"),
+        name="index",
+    ),
     path("", include("django_deepface.urls")),
 ]
 
