@@ -1,8 +1,11 @@
+from typing import ClassVar
+
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.validators import FileExtensionValidator
-from django.contrib.auth import authenticate
-from .models import UserProfile, Identity
+
+from .models import Identity
 
 
 class FaceLoginForm(AuthenticationForm):
@@ -85,5 +88,5 @@ class FaceImageUploadForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Identity
-        fields = ["image"]
+        model: ClassVar = Identity
+        fields: ClassVar = ["image"]

@@ -7,12 +7,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-test-key-not-for-production"
+SECRET_KEY = "django-insecure-test-key-not-for-production"  # nosec
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]  # Allow all hosts in test environment
 
 # Application definition
 INSTALLED_APPS = [
@@ -59,11 +59,11 @@ WSGI_APPLICATION = "django_deepface.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "deepface_test",
-        "USER": "postgres",
-        "PASSWORD": "test",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": os.getenv("TEST_DB_NAME", "deepface_test"),
+        "USER": os.getenv("TEST_DB_USER", "postgres"),
+        "PASSWORD": os.getenv("TEST_DB_PASSWORD", "test"),
+        "HOST": os.getenv("TEST_DB_HOST", "127.0.0.1"),
+        "PORT": os.getenv("TEST_DB_PORT", "5432"),
     },
 }
 
@@ -91,8 +91,25 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Media files
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# DeepFace specific settings
+DJANGO_DEEPFACE = {
+    "MAX_FACE_IMAGES": 4,
+    "FACE_DETECTION_BACKEND": "opencv",
+    "FACE_RECOGNITION_MODEL": "VGG-Face",
+    "FACE_RECOGNITION_METRIC": "cosine",
+    "FACE_RECOGNITION_DISTANCE_THRESHOLD": 0.4,
+    "FACE_DETECTION_MIN_CONFIDENCE": 0.9,
+}
+
+# Create media and static directories if they don't exist
+for directory in [MEDIA_ROOT, STATIC_ROOT]:
+    os.makedirs(directory, exist_ok=True)

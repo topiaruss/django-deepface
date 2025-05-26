@@ -1,10 +1,11 @@
-import os
-from django.core.management.base import BaseCommand, CommandError
-from django.contrib.auth.models import User
-from django_deepface.models import Identity
-from deepface import DeepFace
-from django.core.files import File
 from pathlib import Path
+
+from deepface import DeepFace
+from django.contrib.auth.models import User
+from django.core.files import File
+from django.core.management.base import BaseCommand, CommandError
+
+from django_deepface.models import Identity
 
 
 class Command(BaseCommand):
@@ -110,7 +111,7 @@ class Command(BaseCommand):
                 except Exception as e:
                     self.stdout.write(
                         self.style.ERROR(
-                            f"Error processing {image_path.name} for {username}: {str(e)}"
+                            f"Error processing {image_path.name} for {username}: {e!s}"
                         )
                     )
 

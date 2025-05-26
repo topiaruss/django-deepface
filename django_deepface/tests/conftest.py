@@ -1,6 +1,7 @@
+import os
+
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
-import os
 
 
 @pytest.fixture

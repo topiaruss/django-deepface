@@ -1,10 +1,8 @@
 import contextlib
 import io
-import os
 
 import numpy as np
 import pytest
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse

@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import os
+
+from deepface import DeepFace
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.core.files.storage import default_storage
-from django.conf import settings
-import os
-from deepface import DeepFace
-import numpy as np
-from .forms import FaceLoginForm, FaceImageUploadForm
-from .models import UserProfile, Identity
+from django.shortcuts import get_object_or_404, redirect, render
 from pgvector.django import CosineDistance
+
+from .forms import FaceImageUploadForm, FaceLoginForm
+from .models import Identity
 
 
 def face_login(request):
@@ -70,7 +71,7 @@ def face_login(request):
                     os.remove(temp_path)
 
                 except Exception as e:
-                    messages.error(request, f"Error processing face: {str(e)}")
+                    messages.error(request, f"Error processing face: {e!s}")
                     # Clean up temp file
                     os.remove(temp_path)
 
@@ -115,7 +116,7 @@ def profile_view(request):
                     identity.save(update_fields=["embedding"])
                     messages.success(request, "Face image uploaded successfully!")
                 except Exception as e:
-                    messages.error(request, f"Error processing face: {str(e)}")
+                    messages.error(request, f"Error processing face: {e!s}")
             else:
                 messages.error(request, "Maximum number of face images reached (4)")
         else:

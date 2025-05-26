@@ -1,10 +1,8 @@
 import contextlib
 import io
-import os
 
 import numpy as np
 import pytest
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
@@ -15,12 +13,12 @@ from django_deepface.models import Identity
 
 @pytest.fixture
 def user(db):
-    return User.objects.create_user(username="testuser", password="testpass123")
+    return User.objects.create_user(username="testuser", password="testpass123")  # nosec
 
 
 @pytest.fixture
 def authenticated_client(client, user):
-    client.login(username="testuser", password="testpass123")
+    client.login(username="testuser", password="testpass123")  # nosec
     return client
 
 

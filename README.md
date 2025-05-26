@@ -242,4 +242,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Documentation: [https://django-deepface.readthedocs.io](https://django-deepface.readthedocs.io)
 - Issues: [https://github.com/topiaruss/django-deepface/issues](https://github.com/topiaruss/django-deepface/issues)
-- Discussions: [https://github.com/topiaruss/django-deepface/discussions](https://github.com/topiaruss/django-deepface/discussions) 
+- Discussions: [https://github.com/topiaruss/django-deepface/discussions](https://github.com/topiaruss/django-deepface/discussions)

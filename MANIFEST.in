@@ -7,4 +7,4 @@ recursive-include django_deepface/management *
 recursive-include django_deepface/migrations *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-global-exclude .DS_Store 
+global-exclude .DS_Store

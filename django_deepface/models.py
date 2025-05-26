@@ -1,15 +1,15 @@
-from django.db import models
-from pgvector.django import VectorField, HnswIndex
-from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from typing import ClassVar
 
+from django.contrib.auth.models import User
+from django.db import models
+from pgvector.django import VectorField
 
 # Create your models here.
 
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "faces/user_{0}/{1}".format(instance.user.id, filename)
+    return f"faces/user_{instance.user.id}/{filename}"
 
 
 class Identity(models.Model):
@@ -26,8 +26,8 @@ class Identity(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("user", "image_number")
-        ordering = ["user__username", "image_number"]
+        unique_together: ClassVar = ("user", "image_number")
+        ordering: ClassVar = ["user__username", "image_number"]
         # indexes = [
         #     HnswIndex(
         #         name="identity_embedding_index",
@@ -35,8 +35,8 @@ class Identity(models.Model):
         #         opclasses=["vector_l2_ops"],
         #     )
         # ]
-        verbose_name = "Identity"
-        verbose_name_plural = "Identities"
+        verbose_name: ClassVar = "Identity"
+        verbose_name_plural: ClassVar = "Identities"
 
     def __str__(self):
         return f"{self.user.username}'s face image {self.image_number}"

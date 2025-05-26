@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 from deepface import DeepFace
 from django.conf import settings
@@ -11,7 +11,7 @@ from django.core.files.storage import default_storage
 logger = logging.getLogger(__name__)
 
 
-def get_deepface_settings() -> Dict[str, Any]:
+def get_deepface_settings() -> dict[str, Any]:
     """Get DeepFace settings from Django settings."""
     return {
         "model_name": getattr(settings, "DEEPFACE_MODEL", "VGG-Face"),
@@ -22,7 +22,7 @@ def get_deepface_settings() -> Dict[str, Any]:
     }
 
 
-def process_face_image(image_path: str) -> Optional[list]:
+def process_face_image(image_path: str) -> list | None:
     """
     Process a face image and return embeddings.
 
@@ -37,7 +37,7 @@ def process_face_image(image_path: str) -> Optional[list]:
         embeddings = DeepFace.represent(image_path, **deepface_settings)
         return embeddings[0]["embedding"] if embeddings else None
     except Exception as e:
-        logger.error(f"Error processing face image: {str(e)}")
+        logger.error(f"Error processing face image: {e!s}")
         return None
 
 
@@ -72,7 +72,7 @@ def cleanup_temp_file(file_path: str) -> None:
         if os.path.exists(file_path):
             os.remove(file_path)
     except Exception as e:
-        logger.warning(f"Failed to remove temporary file {file_path}: {str(e)}")
+        logger.warning(f"Failed to remove temporary file {file_path}: {e!s}")
 
 
 def get_max_faces_per_user() -> int:
