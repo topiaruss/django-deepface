@@ -137,6 +137,7 @@ line-ending = "auto"
 
 [tool.bandit]
 exclude = ["django_deepface/tests/"]
+skips = ["B101"]  # Skip assert warnings
 
 [tool.django-stubs]
 django_settings_module = "django_deepface.tests.settings"
