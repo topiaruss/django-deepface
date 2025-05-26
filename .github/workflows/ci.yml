@@ -95,19 +95,15 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 mypy black isort
+        pip install ruff
 
-    - name: Run Black
-      run: black --check django_deepface tests
+    - name: Run Ruff linting
+      run: |
+        ruff check django_deepface tests
 
-    - name: Run isort
-      run: isort --check-only django_deepface tests
-
-    - name: Run Flake8
-      run: flake8 django_deepface tests
-
-    - name: Run MyPy
-      run: mypy django_deepface
+    - name: Run Ruff formatting check
+      run: |
+        ruff format --check django_deepface tests
 
   build:
     needs: [test, lint]
