@@ -5,29 +5,29 @@ class DjangoDeepfaceConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "django_deepface"
     verbose_name = "Django DeepFace"
-    
+
     def ready(self):
         """Initialize app settings when Django starts."""
         from django.conf import settings
-        
+
         # Set default settings if not provided
-        if not hasattr(settings, 'DEEPFACE_MAX_FACES'):
+        if not hasattr(settings, "DEEPFACE_MAX_FACES"):
             settings.DEEPFACE_MAX_FACES = 4
-            
-        if not hasattr(settings, 'DEEPFACE_MODEL'):
+
+        if not hasattr(settings, "DEEPFACE_MODEL"):
             settings.DEEPFACE_MODEL = "VGG-Face"
-            
-        if not hasattr(settings, 'DEEPFACE_DETECTOR'):
+
+        if not hasattr(settings, "DEEPFACE_DETECTOR"):
             settings.DEEPFACE_DETECTOR = "retinaface"
-            
-        if not hasattr(settings, 'DEEPFACE_THRESHOLD'):
+
+        if not hasattr(settings, "DEEPFACE_THRESHOLD"):
             settings.DEEPFACE_THRESHOLD = 0.3
-            
-        if not hasattr(settings, 'DEEPFACE_ENFORCE_DETECTION'):
+
+        if not hasattr(settings, "DEEPFACE_ENFORCE_DETECTION"):
             settings.DEEPFACE_ENFORCE_DETECTION = True
-            
-        if not hasattr(settings, 'DEEPFACE_ALIGN'):
+
+        if not hasattr(settings, "DEEPFACE_ALIGN"):
             settings.DEEPFACE_ALIGN = True
-            
-        if not hasattr(settings, 'DEEPFACE_NORMALIZATION'):
+
+        if not hasattr(settings, "DEEPFACE_NORMALIZATION"):
             settings.DEEPFACE_NORMALIZATION = "base"

@@ -1,15 +1,15 @@
-"""
-Test settings for django-deepface tests.
-"""
+"""Django settings for testing."""
 
 import os
 from pathlib import Path
 
-# Build paths inside the project
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "fake-key-for-tests"
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "django-insecure-test-key-not-for-production"
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -35,12 +35,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "tests.urls"
+ROOT_URLCONF = "django_deepface.tests.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -53,16 +53,18 @@ TEMPLATES = [
     },
 ]
 
+WSGI_APPLICATION = "django_deepface.wsgi.application"
+
 # Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "testdb"),
-        "USER": os.environ.get("DB_USER", "postgres"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "postgres"),
-        "HOST": os.environ.get("DB_HOST", "localhost"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
-    }
+        "NAME": "deepface_test",
+        "USER": "postgres",
+        "PASSWORD": "test",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    },
 }
 
 # Password validation
@@ -89,20 +91,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# Media files
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# DeepFace settings
-DEEPFACE_MAX_FACES = 4
-DEEPFACE_MODEL = "VGG-Face"
-DEEPFACE_DETECTOR = "retinaface"
-DEEPFACE_THRESHOLD = 0.3
-DEEPFACE_ENFORCE_DETECTION = True
-DEEPFACE_ALIGN = True
-DEEPFACE_NORMALIZATION = "base"
