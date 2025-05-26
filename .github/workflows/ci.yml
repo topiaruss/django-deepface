@@ -64,6 +64,10 @@ jobs:
         uv pip install --system Django~=${{ matrix.django-version }}.0
         uv pip install --system -e ".[dev]"
 
+    - name: Create pgvector extension
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d deepface_test -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+
     - name: Run pre-commit hooks
       run: |
         uv pip install --system pre-commit
