@@ -48,6 +48,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libgl1 libglib2.0-0 libpq-dev
+        sudo apt-get install -y libhdf5-dev libhdf5-serial-dev
+        sudo apt-get install -y python3-h5py
+        sudo apt-get install -y libopenblas-dev
 
     - name: Cache pip packages
       uses: actions/cache@v3
