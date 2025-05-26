@@ -61,7 +61,7 @@ WSGI_APPLICATION = "django_deepface.tests.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 DATABASES = {
     "default": dj_database_url.config(
-        default="postgresql://postgres:test@localhost:5432/deepface_test",
+        default="postgresql://postgres:postgres@localhost:5432/deepface_test",
         conn_max_age=600,
     )
 }
