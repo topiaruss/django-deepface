@@ -149,6 +149,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
     - uses: actions/checkout@v3
 
@@ -158,15 +160,12 @@ jobs:
         python-version: '3.11'
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: dist
         path: dist/
 
     - name: Publish to PyPI
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: |
-        uv pip install --system twine
-        twine upload dist/*
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        packages-dir: dist/
