@@ -30,13 +30,14 @@ classifiers = [
 ]
 
 dependencies = [
-    "Django>=4.2",
+    "Django>=4.2,<5.1",
     "deepface>=0.0.79",
     "pgvector>=0.2.4",
     "Pillow>=10.0.0",
     "numpy>=1.24.0",
     "dj-database-url>=2.3.0",
     "psycopg2-binary>=2.9.10",
+    "tf-keras>=2.15.0",
 ]
 
 [project.optional-dependencies]

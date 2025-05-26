@@ -81,6 +81,7 @@ jobs:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/deepface_test
         PYTHONPATH: ${{ github.workspace }}
       run: |
+        uv pip install --system -e .
         pytest -vv --tb=long --log-cli-level=DEBUG --cov=django_deepface --cov-report=xml --cov-report=html
 
     - name: Upload coverage to Codecov
