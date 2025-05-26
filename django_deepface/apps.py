@@ -1,7 +1,11 @@
+"""Django DeepFace application configuration."""
+
 from django.apps import AppConfig
 
 
 class DjangoDeepfaceConfig(AppConfig):
+    """Configuration for the Django DeepFace application."""
+
     default_auto_field = "django.db.models.BigAutoField"
     name = "django_deepface"
     verbose_name = "Django DeepFace"

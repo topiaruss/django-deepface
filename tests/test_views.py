@@ -1,14 +1,16 @@
-import pytest
-from django.urls import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.auth.models import User
-from django_deepface.models import Identity
-from django_deepface.forms import FaceLoginForm
-import os
-from django.conf import settings
-import numpy as np
 import contextlib
 import io
+import os
+
+import numpy as np
+import pytest
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+
+from django_deepface.forms import FaceLoginForm
+from django_deepface.models import Identity
 
 
 @pytest.fixture

@@ -2,7 +2,7 @@
 URL configuration for tests.
 """
 
-from django.urls import path, include
+from django.urls import include, path
 from django.views.generic import TemplateView
 
 # Create a simple index view for tests

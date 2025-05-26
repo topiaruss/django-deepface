@@ -1,11 +1,12 @@
 """Utility functions for django-deepface."""
 
+import logging
 import os
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
+from deepface import DeepFace
 from django.conf import settings
 from django.core.files.storage import default_storage
-from deepface import DeepFace
-import logging
 
 logger = logging.getLogger(__name__)
 
