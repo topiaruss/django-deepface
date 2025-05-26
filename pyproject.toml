@@ -16,7 +16,7 @@ keywords = ["django", "deepface", "face-recognition", "authentication", "biometr
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "Topic :: Software Development :: Libraries :: Django Applications",
+    "Topic :: Software Development :: Libraries :: Python Modules",
     "Framework :: Django",
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",

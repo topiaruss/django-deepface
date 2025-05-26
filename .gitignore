@@ -56,3 +56,6 @@ site/
 dist/
 build/
 *.egg-info/
+
+# Internal documentation (not for public release)
+internal_docs/
