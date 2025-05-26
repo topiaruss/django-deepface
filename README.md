@@ -6,6 +6,8 @@ A Django app for face recognition authentication using DeepFace and pgvector.
 [![Python Support](https://img.shields.io/pypi/pyversions/django-deepface.svg)](https://pypi.org/project/django-deepface/)
 [![Django Support](https://img.shields.io/badge/django-4.0%20%7C%204.1%20%7C%204.2%20%7C%205.0-blue)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![AI-assisted](https://img.shields.io/badge/code%20origin-AI--assisted-blueviolet)](#ai-generated-code-disclosure)
+
 
 ## Features
 
@@ -227,6 +229,16 @@ pytest tests/test_views.py::TestFaceLoginView
 - Consider privacy regulations (GDPR, etc.) when storing biometric data
 - Implement proper access controls and audit logging
 - Regular security updates for dependencies
+
+## AI-Generated Code Disclosure
+
+This project includes portions of code that were generated with the assistance of large language models—specifically , **Claude 3.7 Sonnet**, **Claude 4 Opus**. These tools were used to accelerate scaffolding, explore idiomatic patterns, and propose implementations for specific challenges.
+
+All AI-generated code has been reviewed, integrated, and tested by the author. Transparency is important: this project makes no attempt to conceal the involvement of generative AI, and welcomes scrutiny and feedback.
+
+If you're curious about the design, want to critique the use of AI in open-source development, or have experience with similar approaches, the author invites comments and contributions from both the AI and broader developer communities.
+
+Your insights—technical, ethical, or otherwise—are welcome.
 
 ## License
 
