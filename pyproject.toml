@@ -44,9 +44,7 @@ dev = [
     "pytest>=7.0",
     "pytest-django>=4.5",
     "pytest-cov>=4.0",
-    "black>=22.0",
-    "flake8>=4.0",
-    "mypy>=0.950",
+    "ruff>=0.3.0",
     "django-stubs>=1.12",
     "pre-commit>=2.20",
 ]
@@ -56,15 +54,6 @@ Homepage = "https://github.com/topiaruss/django-deepface"
 Documentation = "https://django-deepface.readthedocs.io"
 Repository = "https://github.com/topiaruss/django-deepface"
 Issues = "https://github.com/topiaruss/django-deepface/issues"
-
-[tool.black]
-line-length = 88
-target-version = ['py38', 'py39', 'py310', 'py311']
-include = '\.pyi?$'
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
@@ -87,13 +76,6 @@ exclude_lines = [
     "raise NotImplementedError",
     "if __name__ == .__main__.:",
 ]
-
-[tool.mypy]
-python_version = "3.8"
-plugins = ["mypy_django_plugin.main"]
-
-[tool.mypy-django_deepface.migrations]
-ignore_errors = true
 
 [tool.ruff]
 line-length = 88

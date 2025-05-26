@@ -19,12 +19,6 @@ repos:
         args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.3.0
-    hooks:
-      - id: mypy
-        additional_dependencies: [django-stubs]
-
   - repo: https://github.com/pycqa/bandit
     rev: 1.7.5
     hooks:
