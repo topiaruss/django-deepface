@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404, redirect, render
 from pgvector.django import CosineDistance
+from django.http import HttpResponse
 
 from .forms import FaceImageUploadForm, FaceLoginForm
 from .models import Identity
@@ -33,11 +34,11 @@ def face_login(request):
                     # Get face embedding using DeepFace
                     login_embedding = DeepFace.represent(
                         temp_path,
-                        model_name="VGG-Face",
-                        enforce_detection=True,
-                        detector_backend="retinaface",
-                        align=True,
-                        normalization="base",
+                        model_name=settings.DEEPFACE_MODEL,
+                        enforce_detection=settings.DEEPFACE_ENFORCE_DETECTION,
+                        detector_backend=settings.DEEPFACE_DETECTOR,
+                        align=settings.DEEPFACE_ALIGN,
+                        normalization=settings.DEEPFACE_NORMALIZATION,
                     )[0]["embedding"]
 
                     # Query using pgvector's cosine distance
@@ -50,13 +51,13 @@ def face_login(request):
                     best_match = matches.first()
                     if best_match:
                         # threshold for cosine similarity (lower is more similar)
-                        if best_match.distance < 0.3:  # Cosine similarity threshold
+                        if best_match.distance < settings.DEEPFACE_THRESHOLD:
                             user = best_match.user
                             login(request, user)
                             messages.success(request, "Face recognition successful!")
                             # Clean up temp file
                             os.remove(temp_path)
-                            return redirect("index")
+                            return redirect(settings.DEEPFACE_LOGIN_REDIRECT_URL)
                         else:
                             messages.error(
                                 request,
@@ -79,7 +80,7 @@ def face_login(request):
                 # Regular password login
                 user = form.get_user()
                 login(request, user)
-                return redirect("index")
+                return redirect(settings.DEEPFACE_LOGIN_REDIRECT_URL)
     else:
         form = FaceLoginForm()
 
@@ -93,7 +94,7 @@ def profile_view(request):
         if form.is_valid():
             # Get the next available image number
             next_number = Identity.objects.filter(user=request.user).count() + 1
-            if next_number <= 4:
+            if next_number <= settings.DEEPFACE_MAX_FACES:
                 try:
                     # Create Identity record with the uploaded image
                     identity = form.save(commit=False)
@@ -104,11 +105,11 @@ def profile_view(request):
                     # Generate face embedding using DeepFace
                     embedding = DeepFace.represent(
                         identity.image.path,
-                        model_name="VGG-Face",
-                        enforce_detection=True,
-                        detector_backend="retinaface",
-                        align=True,
-                        normalization="base",
+                        model_name=settings.DEEPFACE_MODEL,
+                        enforce_detection=settings.DEEPFACE_ENFORCE_DETECTION,
+                        detector_backend=settings.DEEPFACE_DETECTOR,
+                        align=settings.DEEPFACE_ALIGN,
+                        normalization=settings.DEEPFACE_NORMALIZATION,
                     )[0]["embedding"]
 
                     identity.embedding = embedding
@@ -118,7 +119,7 @@ def profile_view(request):
                 except Exception as e:
                     messages.error(request, f"Error processing face: {e!s}")
             else:
-                messages.error(request, "Maximum number of face images reached (4)")
+                messages.error(request, f"Maximum number of face images reached ({settings.DEEPFACE_MAX_FACES})")
         else:
             messages.error(request, f"Form errors: {form.errors}")
     else:
@@ -163,4 +164,8 @@ def logout_view(request):
     """Log out the user and redirect to login page"""
     logout(request)
     messages.success(request, "You have been successfully logged out.")
-    return redirect("django_deepface:login")
+    return redirect(settings.DEEPFACE_LOGOUT_REDIRECT_URL)
+
+
+def index(request):
+    return HttpResponse("Django DeepFace App Index")

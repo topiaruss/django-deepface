@@ -35,3 +35,10 @@ class DjangoDeepfaceConfig(AppConfig):
 
         if not hasattr(settings, "DEEPFACE_NORMALIZATION"):
             settings.DEEPFACE_NORMALIZATION = "base"
+
+        # Authentication redirect settings
+        if not hasattr(settings, "DEEPFACE_LOGIN_REDIRECT_URL"):
+            settings.DEEPFACE_LOGIN_REDIRECT_URL = "index"
+
+        if not hasattr(settings, "DEEPFACE_LOGOUT_REDIRECT_URL"):
+            settings.DEEPFACE_LOGOUT_REDIRECT_URL = "django_deepface:login"

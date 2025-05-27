@@ -167,7 +167,7 @@ class TestFaceLoginView:
         )
 
         assert response.status_code == 302  # Redirects to index
-        assert response.url == reverse("index")
+        assert response.url == reverse("django_deepface:index")
 
     def test_face_login_password_invalid(self, client):
         """Test invalid password login"""
@@ -241,7 +241,7 @@ class TestFaceLoginView:
 
         # Check for redirect
         assert response.status_code == 302
-        assert response.url == reverse("index")
+        assert response.url == reverse("django_deepface:index")
 
     def test_face_login_face_no_match(self, client, user, real_face_image, monkeypatch):
         """Test face login with no matching face"""
