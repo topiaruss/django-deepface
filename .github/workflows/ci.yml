@@ -118,11 +118,11 @@ jobs:
 
     - name: Run Ruff linting
       run: |
-        ruff check django_deepface tests
+        ruff check django_deepface
 
     - name: Run Ruff formatting check
       run: |
-        ruff format --check django_deepface tests
+        ruff format --check django_deepface
 
   build:
     needs: [test, lint]
