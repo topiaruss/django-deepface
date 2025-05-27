@@ -37,6 +37,7 @@ setup(
         "pgvector>=0.4.1",
         "Pillow>=9.0.0",
         "numpy>=1.21.0",
+        "device-detector==5.0.1",
     ],
     extras_require={
         "dev": [
