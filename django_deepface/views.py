@@ -6,9 +6,10 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from pgvector.django import CosineDistance
-from django.http import HttpResponse
+
 from django_deepface.signals import face_image_processed
 
 from .forms import FaceImageUploadForm, FaceLoginForm
@@ -55,7 +56,12 @@ def face_login(request):
                         if best_match.distance < settings.DEEPFACE_THRESHOLD:
                             user = best_match.user
                             login(request, user)
-                            face_image_processed.send("face_login", request=request, stage="login", was_successful=True)
+                            face_image_processed.send(
+                                "face_login",
+                                request=request,
+                                stage="login",
+                                was_successful=True,
+                            )
                             messages.success(request, "Face recognition successful!")
                             # Clean up temp file
                             os.remove(temp_path)
@@ -65,13 +71,23 @@ def face_login(request):
                                 request,
                                 "Face not recognized. Please try again or use password login.",
                             )
-                            face_image_processed.send("face_login", request=request, stage="login", was_successful=False)
+                            face_image_processed.send(
+                                "face_login",
+                                request=request,
+                                stage="login",
+                                was_successful=False,
+                            )
                     else:
                         messages.error(
                             request,
                             "No face recognized. Please try again or use password login.",
                         )
-                        face_image_processed.send("face_login", request=request, stage="login", was_successful=False)
+                        face_image_processed.send(
+                            "face_login",
+                            request=request,
+                            stage="login",
+                            was_successful=False,
+                        )
                     # Clean up temp file
                     os.remove(temp_path)
 
@@ -119,12 +135,17 @@ def profile_view(request):
                     identity.embedding = embedding
 
                     identity.save(update_fields=["embedding"])
-                    face_image_processed.send("profile_view", request=request, stage="register")
+                    face_image_processed.send(
+                        "profile_view", request=request, stage="register"
+                    )
                     messages.success(request, "Face image uploaded successfully!")
                 except Exception as e:
                     messages.error(request, f"Error processing face: {e!s}")
             else:
-                messages.error(request, f"Maximum number of face images reached ({settings.DEEPFACE_MAX_FACES})")
+                messages.error(
+                    request,
+                    f"Maximum number of face images reached ({settings.DEEPFACE_MAX_FACES})",
+                )
         else:
             messages.error(request, f"Form errors: {form.errors}")
     else:
@@ -173,4 +194,6 @@ def logout_view(request):
 
 
 def index(request):
-    return HttpResponse("Django DeepFace App Index - check settings.DEEPFACE_LOGIN_REDIRECT_URL")
+    return HttpResponse(
+        "Django DeepFace App Index - check settings.DEEPFACE_LOGIN_REDIRECT_URL"
+    )
