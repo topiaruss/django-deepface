@@ -4,7 +4,7 @@ A Django app for face recognition authentication using DeepFace and pgvector.
 
 [![PyPI version](https://badge.fury.io/py/django-deepface.svg)](https://badge.fury.io/py/django-deepface)
 [![Python Support](https://img.shields.io/pypi/pyversions/django-deepface.svg)](https://pypi.org/project/django-deepface/)
-[![Django Support](https://img.shields.io/badge/django-4.2%20%7C%205.0%20%7C%205.1-blue)](https://www.djangoproject.com/)
+[![Django Support](https://img.shields.io/badge/django-4.2%20%7C%205.0%20%7C%205.1%20%7C%205.2-blue)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AI-assisted](https://img.shields.io/badge/code%20origin-AI--assisted-blueviolet)](#ai-generated-code-disclosure)
 
