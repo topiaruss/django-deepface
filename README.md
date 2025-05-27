@@ -20,7 +20,7 @@ A Django app for face recognition authentication using DeepFace and pgvector.
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.8+ (less than 3.13 due to missing 3.13 wheels for tensorflow)
 - Django 4.2+
 - PostgreSQL with pgvector extension
 - A working webcam (for face capture features)
