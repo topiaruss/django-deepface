@@ -18,6 +18,11 @@ A Django app for face recognition authentication using DeepFace and pgvector.
 - 🎨 Modern, responsive UI with Bootstrap 5
 - 🔒 Secure storage and processing of biometric data
 
+## Demo app
+
+There is a [demo app](https://github.com/topiaruss/django-deepface-demo) that shows how you can get started with this library. The app adds the ability to count successful use of image upload, storing the browser agent string for analysis.  This helps check if users in your company can use image capture and on what devices, before making the decision to implement it.
+
+
 ## Requirements
 
 - Python 3.8+ (less than 3.12 due to tensorflow wheels and instruction set issues)
