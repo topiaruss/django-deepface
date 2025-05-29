@@ -8,13 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.3] - 2025-05-29
 
 ### Added
-- Signal support: Added `face_image_processed` signal that is emitted when a face image is successfully processed
-- This allows applications to hook into the face processing workflow and perform custom actions
-
-### Fixed
-- Import compatibility issues
-
-## [0.0.2] - 2025-05-27
+- Added `face_image_processed` signal that is emitted when a face image is successfully processed
+- Signal support for extending functionality when face images are saved
 
 ### Changed
 - Updated dependencies to latest compatible versions
