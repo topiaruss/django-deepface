@@ -1,0 +1,180 @@
+digraph DjangoDeepfaceTechElements {
+  // Graph styling
+  graph [fontname="Arial", rankdir=LR, splines=true, overlap=false, nodesep=0.8];
+  node [fontname="Arial", shape=box, style="filled,rounded", fillcolor=lightblue, fontsize=12];
+  edge [fontname="Arial", fontsize=10];
+
+  // Main categories
+  Framework [label="Web Framework", shape=ellipse, fillcolor=lightgreen];
+  MLLibraries [label="ML/AI Libraries", shape=ellipse, fillcolor=lightgreen];
+  Database [label="Database", shape=ellipse, fillcolor=lightgreen];
+  PackageManagement [label="Package Management", shape=ellipse, fillcolor=lightgreen];
+  Testing [label="Testing", shape=ellipse, fillcolor=lightgreen];
+  CodeQuality [label="Code Quality", shape=ellipse, fillcolor=lightgreen];
+  Documentation [label="Documentation", shape=ellipse, fillcolor=lightgreen];
+  CI_CD [label="CI/CD", shape=ellipse, fillcolor=lightgreen];
+  DevTools [label="Development Tools", shape=ellipse, fillcolor=lightgreen];
+  Security [label="Security", shape=ellipse, fillcolor=lightgreen];
+  Architecture [label="Architecture", shape=ellipse, fillcolor=lightgreen];
+  VersionControl [label="Version Control", shape=ellipse, fillcolor=lightgreen];
+
+  // Framework components
+  Django [label="Django 4.2-5.2"];
+  DjangoAdmin [label="Django Admin"];
+  DjangoForms [label="Django Forms"];
+  DjangoModels [label="Django Models"];
+  DjangoSignals [label="Django Signals"];
+  DjangoViews [label="Django Views"];
+  DjangoUrls [label="URL Routing"];
+  DjangoMigrations [label="Migrations"];
+  DjangoTemplates [label="Templates"];
+  DjangoStaticFiles [label="Static Files"];
+  DjangoMedia [label="Media Files"];
+
+  // ML/AI Libraries
+  DeepFace [label="DeepFace >= 0.0.79"];
+  TensorFlow [label="tf-keras >= 2.15.0"];
+  NumPy [label="NumPy >= 1.24.0"];
+  Pillow [label="Pillow >= 10.0.0"];
+  FaceRecognition [label="Face Recognition"];
+  BiometricAuth [label="Biometric Authentication"];
+
+  // Database components
+  PostgreSQL [label="PostgreSQL"];
+  PGVector [label="pgvector >= 0.2.4"];
+  Psycopg2 [label="psycopg2-binary >= 2.9.10"];
+  DjDatabaseUrl [label="dj-database-url >= 2.3.0"];
+  VectorDB [label="Vector Database"];
+
+  // Package Management tools
+  PyPI [label="PyPI"];
+  SetupTools [label="setuptools >= 45"];
+  Build [label="build"];
+  PyProject [label="pyproject.toml"];
+  UV [label="uv"];
+  Twine [label="Twine"];
+  ManifestIn [label="MANIFEST.in"];
+  SetupPy [label="setup.py"];
+  SetupScm [label="setuptools_scm"];
+
+  // Testing tools and concepts
+  Pytest [label="Pytest >= 7.0"];
+  PytestDjango [label="pytest-django >= 4.5"];
+  PytestCov [label="pytest-cov >= 4.0"];
+  Coverage [label="Coverage"];
+  CoverageRc [label=".coveragerc"];
+  PytestIni [label="pytest.ini"];
+  TestSettings [label="Test Settings"];
+  UnitTests [label="Unit Tests"];
+  Codecov [label="Codecov"];
+
+  // Code Quality tools
+  Ruff [label="Ruff >= 0.3.0"];
+  PreCommit [label="pre-commit >= 2.20"];
+  Bandit [label="Bandit Security"];
+  DjangoStubs [label="django-stubs >= 1.12"];
+  TypeChecking [label="Type Checking"];
+  Linting [label="Linting"];
+  Formatting [label="Code Formatting"];
+
+  // Documentation
+  README [label="README.md"];
+  CHANGELOG [label="CHANGELOG.md"];
+  LICENSE [label="MIT License"];
+  InternalDocs [label="Internal Docs"];
+  DocStrings [label="Docstrings"];
+  TypeHints [label="Type Hints"];
+
+  // CI/CD components
+  GitHubActions [label="GitHub Actions"];
+  CIWorkflow [label="ci.yml"];
+  TestWorkflow [label="test.yml"];
+  MatrixTesting [label="Matrix Testing"];
+  BuildArtifacts [label="Build Artifacts"];
+  PyPIPublish [label="PyPI Publishing"];
+  TrustedPublishing [label="Trusted Publishing"];
+
+  // Development Tools
+  Makefile [label="Makefile"];
+  GitIgnore [label=".gitignore"];
+  DSStore [label=".DS_Store handling"];
+  VirtualEnv [label="Virtual Environment"];
+  CacheManagement [label="Cache Management"];
+
+  // Security aspects
+  Authentication [label="Authentication"];
+  BiometricSecurity [label="Biometric Security"];
+  SecureStorage [label="Secure Storage"];
+  OIDC [label="OIDC Publishing"];
+
+  // Architecture patterns
+  MVT [label="Model-View-Template"];
+  AppConfig [label="App Configuration"];
+  Management [label="Management Commands"];
+  Utils [label="Utility Functions"];
+  SignalHandlers [label="Signal Handlers"];
+  AdminInterface [label="Admin Interface"];
+
+  // Version Control
+  Git [label="Git"];
+  GitHub [label="GitHub"];
+  BranchStrategy [label="Branch Strategy"];
+  PRWorkflow [label="Pull Request Workflow"];
+
+  // Connections from categories to tools
+  Framework -> {Django, DjangoAdmin, DjangoForms, DjangoModels, DjangoSignals, DjangoViews, DjangoUrls, DjangoMigrations, DjangoTemplates, DjangoStaticFiles, DjangoMedia};
+  MLLibraries -> {DeepFace, TensorFlow, NumPy, Pillow, FaceRecognition, BiometricAuth};
+  Database -> {PostgreSQL, PGVector, Psycopg2, DjDatabaseUrl, VectorDB};
+  PackageManagement -> {PyPI, SetupTools, Build, PyProject, UV, Twine, ManifestIn, SetupPy, SetupScm};
+  Testing -> {Pytest, PytestDjango, PytestCov, Coverage, CoverageRc, PytestIni, TestSettings, UnitTests, Codecov};
+  CodeQuality -> {Ruff, PreCommit, Bandit, DjangoStubs, TypeChecking, Linting, Formatting};
+  Documentation -> {README, CHANGELOG, LICENSE, InternalDocs, DocStrings, TypeHints};
+  CI_CD -> {GitHubActions, CIWorkflow, TestWorkflow, MatrixTesting, BuildArtifacts, PyPIPublish, TrustedPublishing};
+  DevTools -> {Makefile, GitIgnore, DSStore, VirtualEnv, CacheManagement};
+  Security -> {Authentication, BiometricSecurity, SecureStorage, OIDC};
+  Architecture -> {MVT, AppConfig, Management, Utils, SignalHandlers, AdminInterface};
+  VersionControl -> {Git, GitHub, BranchStrategy, PRWorkflow};
+
+  // Cross-category relationships
+  Django -> PostgreSQL [label="connects to"];
+  DeepFace -> FaceRecognition [label="provides"];
+  FaceRecognition -> BiometricAuth [label="enables"];
+  PGVector -> VectorDB [label="implements"];
+  VectorDB -> FaceRecognition [label="stores embeddings"];
+  PyProject -> SetupTools [label="configures"];
+  Pytest -> DjangoModels [label="tests"];
+  Ruff -> PreCommit [label="runs in"];
+  GitHubActions -> MatrixTesting [label="executes"];
+  MatrixTesting -> Django [label="tests versions"];
+  Build -> PyPI [label="publishes to"];
+  Makefile -> Testing [label="automates"];
+  DjangoAdmin -> AdminInterface [label="implements"];
+  DjangoSignals -> SignalHandlers [label="triggers"];
+  Bandit -> Security [label="checks"];
+  UV -> PyPI [label="installs from"];
+  Coverage -> Codecov [label="reports to"];
+  TrustedPublishing -> PyPIPublish [label="secures"];
+  Git -> GitHub [label="pushes to"];
+  PreCommit -> Git [label="hooks into"];
+  CIWorkflow -> BuildArtifacts [label="produces"];
+  TypeHints -> DjangoStubs [label="validates"];
+
+  // Implementation flow
+  DjangoViews -> DjangoForms [label="uses"];
+  DjangoForms -> DjangoModels [label="validates"];
+  DjangoModels -> DjangoMigrations [label="generates"];
+  BiometricAuth -> DjangoViews [label="protects"];
+  Utils -> DeepFace [label="wraps"];
+  AppConfig -> Django [label="configures"];
+
+  // Testing flow
+  PytestDjango -> TestSettings [label="loads"];
+  PytestCov -> Coverage [label="generates"];
+  UnitTests -> Pytest [label="run by"];
+
+  // Development workflow
+  PreCommit -> Ruff [label="runs"];
+  PreCommit -> Bandit [label="runs"];
+  Makefile -> UV [label="uses"];
+  Makefile -> Pytest [label="invokes"];
+}
