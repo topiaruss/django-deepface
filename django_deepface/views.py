@@ -25,6 +25,7 @@ def face_login(request):
             ):
                 # Process face login
                 face_image = request.FILES["face_image"]
+                username = form.cleaned_data.get("username")  # Get the entered username
                 temp_path = os.path.join(settings.MEDIA_ROOT, "temp", face_image.name)
                 os.makedirs(os.path.dirname(temp_path), exist_ok=True)
 
@@ -43,13 +44,13 @@ def face_login(request):
                         normalization=settings.DEEPFACE_NORMALIZATION,
                     )[0]["embedding"]
 
-                    # Query using pgvector's cosine distance
-                    matches = Identity.objects.annotate(
+                    # Query using pgvector's cosine distance - ONLY for the specified username
+                    matches = Identity.objects.filter(
+                        user__username=username  # Only match faces for the entered username
+                    ).annotate(
                         distance=CosineDistance("embedding", login_embedding)
                     ).order_by("distance")
-                    dat = [(m.distance, m.image.name) for m in matches]
-                    for d in dat:
-                        print(d)
+                    
                     best_match = matches.first()
                     if best_match:
                         # threshold for cosine similarity (lower is more similar)
@@ -69,7 +70,7 @@ def face_login(request):
                         else:
                             messages.error(
                                 request,
-                                "Face not recognized. Please try again or use password login.",
+                                f"Face not recognized for user '{username}'. Please try again or use password login.",
                             )
                             face_image_processed.send(
                                 "face_login",
@@ -80,7 +81,7 @@ def face_login(request):
                     else:
                         messages.error(
                             request,
-                            "No face recognized. Please try again or use password login.",
+                            f"No face images found for user '{username}'. Please register your face first or use password login.",
                         )
                         face_image_processed.send(
                             "face_login",
@@ -94,7 +95,8 @@ def face_login(request):
                 except Exception as e:
                     messages.error(request, f"Error processing face: {e!s}")
                     # Clean up temp file
-                    os.remove(temp_path)
+                    if os.path.exists(temp_path):
+                        os.remove(temp_path)
 
             else:
                 # Regular password login

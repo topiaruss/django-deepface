@@ -125,7 +125,6 @@
                 });
                 webcam.srcObject = stream;
             } catch (err) {
-                console.error('Error accessing webcam:', err);
                 alert('Error accessing webcam. Please make sure you have granted camera permissions.');
                 useFaceLogin.checked = false;
                 webcamContainer.style.display = 'none';
@@ -157,9 +156,6 @@
 
                 // Set the files property of the input
                 faceImageInput.files = dataTransfer.files;
-
-                // Log to verify the file was set
-                console.log('Face image captured:', faceImageInput.files[0]);
 
                 imageCaptured = true;  // Set image captured state
                 updateLoginButtonState();  // Update button state
