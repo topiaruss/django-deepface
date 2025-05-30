@@ -83,7 +83,7 @@ jobs:
       run: |
         uv pip install --system pre-commit
         # Skip binary files in pre-commit checks
-        pre-commit run --all-files --files $(git ls-files | grep -v '\.\(webp\|jpg\|jpeg\|png\|gif\|ico\|pdf\|zip\|tar\|gz\)$')
+        pre-commit run --files $(git ls-files | grep -v '\.\(webp\|jpg\|jpeg\|png\|gif\|ico\|pdf\|zip\|tar\|gz\)$')
 
     - name: Run tests with coverage
       env:
