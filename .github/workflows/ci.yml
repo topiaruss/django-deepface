@@ -82,7 +82,8 @@ jobs:
     - name: Run pre-commit hooks
       run: |
         uv pip install --system pre-commit
-        pre-commit run --all-files
+        # Exclude binary files from pre-commit checks
+        pre-commit run --all-files --exclude "*.{webp,jpg,jpeg,png,gif,ico,pdf,zip,tar,gz}"
 
     - name: Run tests with coverage
       env:

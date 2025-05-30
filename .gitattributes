@@ -13,3 +13,6 @@
 
 # Force Python files to always use LF line endings
 *.py text eol=lf
+
+# Binary files
+*.{webp,jpg,jpeg,png,gif,ico,pdf,zip,tar,gz} binary
