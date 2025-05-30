@@ -82,8 +82,11 @@ jobs:
     - name: Run pre-commit hooks
       run: |
         uv pip install --system pre-commit
-        # Exclude binary files from pre-commit checks
-        pre-commit run --all-files --exclude "*.{webp,jpg,jpeg,png,gif,ico,pdf,zip,tar,gz}"
+        # Create a temporary pre-commit config that excludes binary files
+        cp .pre-commit-config.yaml .pre-commit-config.yaml.bak
+        sed -i 's/types: \[file\]/types: [file]\n        exclude: \\.(webp|jpg|jpeg|png|gif|ico|pdf|zip|tar|gz)$/' .pre-commit-config.yaml
+        pre-commit run --all-files
+        mv .pre-commit-config.yaml.bak .pre-commit-config.yaml
 
     - name: Run tests with coverage
       env:
