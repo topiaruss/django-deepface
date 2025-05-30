@@ -6,6 +6,7 @@ repos:
         stages: [pre-commit]
       - id: end-of-file-fixer
         stages: [pre-commit]
+        types: [file]
       - id: check-yaml
         stages: [pre-commit]
       - id: check-added-large-files
@@ -20,6 +21,7 @@ repos:
         stages: [pre-commit]
       - id: mixed-line-ending
         stages: [pre-commit]
+        args: [--fix=lf]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.3.0
