@@ -45,12 +45,14 @@ def face_login(request):
                     )[0]["embedding"]
 
                     # Query using pgvector's cosine distance - ONLY for the specified username
-                    matches = Identity.objects.filter(
-                        user__username=username  # Only match faces for the entered username
-                    ).annotate(
-                        distance=CosineDistance("embedding", login_embedding)
-                    ).order_by("distance")
-                    
+                    matches = (
+                        Identity.objects.filter(
+                            user__username=username  # Only match faces for the entered username
+                        )
+                        .annotate(distance=CosineDistance("embedding", login_embedding))
+                        .order_by("distance")
+                    )
+
                     best_match = matches.first()
                     if best_match:
                         # threshold for cosine similarity (lower is more similar)

@@ -350,15 +350,17 @@ class TestFaceLoginView:
         messages = list(response.context["messages"])
         assert any("Error processing face" in str(msg) for msg in messages)
 
-    def test_face_login_wrong_username_match(self, client, real_face_image, monkeypatch):
+    def test_face_login_wrong_username_match(
+        self, client, real_face_image, monkeypatch
+    ):
         """Test that face login only matches faces for the specified username"""
         # Create two users
         user1 = User.objects.create_user(username="alice", password="pass123")
         user2 = User.objects.create_user(username="bob", password="pass456")
-        
+
         # Create identical embeddings for both users (simulating similar faces)
         identical_embedding = np.random.rand(Identity.vector_dimensions).tolist()
-        
+
         Identity.objects.create(
             user=user1,
             image_number=1,
@@ -366,7 +368,7 @@ class TestFaceLoginView:
             embedding=identical_embedding,
         )
         real_face_image.seek(0)
-        
+
         Identity.objects.create(
             user=user2,
             image_number=1,
@@ -374,27 +376,32 @@ class TestFaceLoginView:
             embedding=identical_embedding,
         )
         real_face_image.seek(0)
-        
+
         # Mock DeepFace to return the same embedding
         def mock_represent(*args, **kwargs):
             return [{"embedding": identical_embedding}]
-        
+
         monkeypatch.setattr("deepface.DeepFace.represent", mock_represent)
-        
+
         # Mock file operations
         def mock_remove(*args, **kwargs):
             pass
+
         monkeypatch.setattr("os.remove", mock_remove)
-        
+
         def mock_makedirs(*args, **kwargs):
             pass
+
         monkeypatch.setattr("os.makedirs", mock_makedirs)
-        
+
         @contextlib.contextmanager
         def mock_storage_open(*args, **kwargs):
             yield io.BytesIO()
-        monkeypatch.setattr("django.core.files.storage.default_storage.open", mock_storage_open)
-        
+
+        monkeypatch.setattr(
+            "django.core.files.storage.default_storage.open", mock_storage_open
+        )
+
         # Try to login as alice - should succeed
         url = reverse("django_deepface:login")
         response = client.post(
@@ -405,14 +412,14 @@ class TestFaceLoginView:
                 "face_image": real_face_image,
             },
         )
-        
+
         assert response.status_code == 302
         assert response.url == reverse("django_deepface:index")
-        
+
         # Logout
         client.logout()
         real_face_image.seek(0)
-        
+
         # Try to login as bob with alice's face - should also succeed since we're checking username
         response = client.post(
             url,
@@ -422,39 +429,46 @@ class TestFaceLoginView:
                 "face_image": real_face_image,
             },
         )
-        
+
         assert response.status_code == 302
         assert response.url == reverse("django_deepface:index")
 
-    def test_face_login_no_face_for_username(self, client, real_face_image, monkeypatch):
+    def test_face_login_no_face_for_username(
+        self, client, real_face_image, monkeypatch
+    ):
         """Test face login when username has no registered faces"""
         # Create user without any face images
         user = User.objects.create_user(username="noface", password="pass123")
-        
+
         # Verify user exists and has no face images
         assert User.objects.filter(username="noface").exists()
         assert not Identity.objects.filter(user=user).exists()
-        
+
         # Mock DeepFace
         def mock_represent(*args, **kwargs):
             return [{"embedding": np.random.rand(Identity.vector_dimensions).tolist()}]
-        
+
         monkeypatch.setattr("deepface.DeepFace.represent", mock_represent)
-        
+
         # Mock file operations
         def mock_remove(*args, **kwargs):
             pass
+
         monkeypatch.setattr("os.remove", mock_remove)
-        
+
         def mock_makedirs(*args, **kwargs):
             pass
+
         monkeypatch.setattr("os.makedirs", mock_makedirs)
-        
+
         @contextlib.contextmanager
         def mock_storage_open(*args, **kwargs):
             yield io.BytesIO()
-        monkeypatch.setattr("django.core.files.storage.default_storage.open", mock_storage_open)
-        
+
+        monkeypatch.setattr(
+            "django.core.files.storage.default_storage.open", mock_storage_open
+        )
+
         # Try face login
         url = reverse("django_deepface:login")
         response = client.post(
@@ -466,10 +480,12 @@ class TestFaceLoginView:
             },
             follow=True,
         )
-        
+
         assert response.status_code == 200
         messages = list(response.context["messages"])
-        assert any("No face images found for user 'noface'" in str(msg) for msg in messages)
+        assert any(
+            "No face images found for user 'noface'" in str(msg) for msg in messages
+        )
 
 
 @pytest.mark.django_db
