@@ -431,6 +431,10 @@ class TestFaceLoginView:
         # Create user without any face images
         user = User.objects.create_user(username="noface", password="pass123")
         
+        # Verify user exists and has no face images
+        assert User.objects.filter(username="noface").exists()
+        assert not Identity.objects.filter(user=user).exists()
+        
         # Mock DeepFace
         def mock_represent(*args, **kwargs):
             return [{"embedding": np.random.rand(Identity.vector_dimensions).tolist()}]
