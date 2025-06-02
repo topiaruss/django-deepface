@@ -1,5 +1,14 @@
 # Changelog
 
+<!--
+Release Checklist:
+1. Update version in pyproject.toml
+2. Run `make update-badge` (or it will run automatically with `make build`)
+3. Update CHANGELOG.md with release date
+4. Run `make check && make test && make build`
+5. Commit, merge to main, tag, and push
+-->
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

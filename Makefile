@@ -1,4 +1,4 @@
-.PHONY: install test lint format clean build upload dev update-badge
+.PHONY: install test lint format clean build upload dev update-badge prepare-release
 
 # Development setup
 install:
@@ -24,7 +24,7 @@ format:
 check: format lint
 
 # Building and uploading
-build:
+build: update-badge
 	uv build
 
 upload:
@@ -33,6 +33,9 @@ upload:
 # Utilities
 update-badge:
 	uv run python scripts/update_badge.py
+
+prepare-release:
+	uv run python scripts/prepare_release.py
 
 # Cleanup
 clean:
