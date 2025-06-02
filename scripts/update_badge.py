@@ -46,13 +46,10 @@ def update_badge(version):
         if "badge.fury.io/py/django-deepface" in line:
             print(f"Found badge.fury.io badge at line {i + 1}: {line.strip()}")
 
-            # Update version parameter in badge.fury.io URL
-            new_line = re.sub(
-                r"(badge\.fury\.io/py/django-deepface\.svg)\?version=[^)]*",
-                rf"\1?version={version}",
-                line,
+            # badge.fury.io automatically shows latest version, no need to modify
+            print(
+                "Badge.fury.io automatically shows latest PyPI version - no update needed"
             )
-            lines[i] = new_line
             badge_found = True
             break
 
