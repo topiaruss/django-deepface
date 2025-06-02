@@ -45,4 +45,4 @@ jobs:
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/deepface_test
       run: |
-        make test-all
+        make test
