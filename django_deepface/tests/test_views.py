@@ -6,17 +6,25 @@ import pytest
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from pytest_fixturecheck import django_model_has_fields, fixturecheck
 
 from django_deepface.forms import FaceLoginForm
 from django_deepface.models import Identity
 
 
 @pytest.fixture
+@fixturecheck(
+    django_model_has_fields(
+        "username",
+        "password",
+    )
+)
 def user(db):
     return User.objects.create_user(username="testuser", password="testpass123")  # nosec
 
 
 @pytest.fixture
+@fixturecheck()
 def authenticated_client(client, user):
     client.login(username="testuser", password="testpass123")  # nosec
     return client

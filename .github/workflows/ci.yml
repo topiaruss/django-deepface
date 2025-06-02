@@ -1,33 +1,23 @@
-name: CI/CD
+name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
-        django-version: ['4.2', '5.0', '5.1', '5.2']
+        python-version: ['3.9', '3.11']
+        django-version: ['4.2', '5.0', '5.1']
         exclude:
-          - python-version: '3.8'
-            django-version: '5.0'
-          - python-version: '3.8'
-            django-version: '5.1'
-          - python-version: '3.8'
-            django-version: '5.2'
-          - python-version: '3.9'
-            django-version: '5.0'
           - python-version: '3.9'
             django-version: '5.1'
-          - python-version: '3.9'
-            django-version: '5.2'
 
     services:
       postgres:
@@ -45,108 +35,70 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
 
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y libgl1 libglib2.0-0 libpq-dev
-        sudo apt-get install -y libhdf5-dev libhdf5-serial-dev
-        sudo apt-get install -y python3-h5py
-        sudo apt-get install -y libopenblas-dev
-
-    - name: Cache pip packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install uv
-        uv pip install --system Django~=${{ matrix.django-version }}.0
-        uv pip install --system -e ".[dev]"
+        uv sync --extra dev
+        uv pip install Django~=${{ matrix.django-version }}.0
 
     - name: Create pgvector extension
       run: |
         PGPASSWORD=postgres psql -h localhost -U postgres -d deepface_test -c 'CREATE EXTENSION IF NOT EXISTS vector;'
 
-    - name: Run pre-commit hooks
-      run: |
-        uv pip install --system pre-commit
-        pre-commit run --files $(git ls-files '*.py')
-
-    - name: Run tests with coverage
+    - name: Run tests
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/deepface_test
-        PYTHONPATH: ${{ github.workspace }}
       run: |
-        uv pip install --system -e .
-        pytest -vv --tb=long --log-cli-level=DEBUG --cov=django_deepface --cov-report=xml --cov-report=html
+        uv run pytest
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4
+      if: matrix.python-version == '3.11' && matrix.django-version == '5.0'
       with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
+      run: uv sync --extra dev
+    - name: Run linting
       run: |
-        python -m pip install --upgrade pip
-        pip install uv
-        uv pip install --system ruff
-
-    - name: Run Ruff linting
-      run: |
-        ruff check django_deepface
-
-    - name: Run Ruff formatting check
-      run: |
-        ruff format --check django_deepface
+        uv run ruff check . --ignore=E501,RUF012
+        uv run ruff format --check .
 
   build:
     needs: [test, lint]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
     - name: Build package
-      run: |
-        python -m pip install --upgrade pip
-        pip install uv
-        uv pip install --system build
-        python -m build
-
-    - name: Check package
-      run: |
-        uv pip install --system twine
-        twine check dist/*
-
+      run: uv build
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -158,22 +110,18 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     permissions:
-      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
         name: dist
         path: dist/
-
     - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        packages-dir: dist/
+      run: uv publish

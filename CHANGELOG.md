@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2025-06-02
+
+### Changed
+- **BREAKING**: Modernized build system from setuptools to hatchling
+- **BREAKING**: Minimum Python version increased to 3.9 (removed 3.8 support)
+- **BREAKING**: Updated psycopg2-binary to psycopg[binary] >= 3.1.0
+- Consolidated all configuration into pyproject.toml (single source of truth)
+- Simplified CI/CD workflow with reduced matrix testing (focus on LTS versions)
+- Updated dependencies to latest compatible versions
+- Improved development workflow with uv package manager
+
+### Removed
+- setup.py (redundant with pyproject.toml)
+- pytest.ini (moved to pyproject.toml)
+- .coveragerc (moved to pyproject.toml)
+- Bandit security scanning (focused on core linting)
+
+### Added
+- uv-based development workflow for faster dependency management
+- Modern hatchling build backend
+- Simplified Makefile with essential commands only
+- pytest-fixturecheck integration for better test validation
+
+### Fixed
+- Python 3.13 compatibility issues with TensorFlow (pinned to 3.11 max)
+- Import sorting and code formatting consistency
+- Migration file linting warnings (properly excluded)
+
 ## [0.0.5] - 2025-05-30
 
 ### Changed

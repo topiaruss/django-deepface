@@ -1,38 +1,41 @@
-.PHONY: test-all test-all-first test-specific clean db-migrate init lint format check
+.PHONY: install test lint format clean build upload dev update-badge
 
-# Test targets
-test-all:
-	python -m pytest django_deepface/tests/ --cov=django_deepface --cov-report=term-missing -v
+# Development setup
+install:
+	uv sync
 
-test-all-first:
-	python -m pytest django_deepface/tests/ --cov=django_deepface --cov-report=term-missing -v --exitfirst
+dev: install
+	uv run pre-commit install
 
-test-specific:
-	python -m pytest $(filter-out $@,$(MAKECMDGOALS)) --cov=django_deepface --cov-report=term-missing -v
+# Testing
+test:
+	uv run pytest
 
-# Linting and formatting targets
+test-cov:
+	uv run pytest --cov-report=html
+
+# Code quality
 lint:
-	ruff check .
+	uv run ruff check .
 
 format:
-	ruff format .
+	uv run ruff format .
 
-check: lint format
+check: format lint
 
-# Database targets
-db-migrate:
-	python manage.py migrate
+# Building and uploading
+build:
+	uv build
 
-# Cleanup targets
+upload:
+	uv publish
+
+# Utilities
+update-badge:
+	uv run python scripts/update_badge.py
+
+# Cleanup
 clean:
-	find . -type d -name "__pycache__" -exec rm -r {} +
-	find . -type d -name ".pytest_cache" -exec rm -r {} +
-	find . -type d -name ".coverage" -delete
-	find . -type d -name "htmlcov" -exec rm -r {} +
-	find . -type d -name ".DS_Store" -delete
-
-# Initialization target
-init: clean
-	uv pip install -e .
-	uv pip install pytest pytest-django pytest-cov
-	make db-migrate
+	rm -rf build/ dist/ *.egg-info/ .pytest_cache/ htmlcov/ .coverage
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -name "*.pyc" -delete

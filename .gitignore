@@ -28,10 +28,13 @@ db.sqlite3-journal
 media/
 staticfiles/
 
-# Virtual Environment
+# Virtual Environment & Package Managers
 venv/
 env/
 ENV/
+.venv/
+uv.lock
+.python-version
 
 # IDE
 .idea/
@@ -40,7 +43,7 @@ ENV/
 *.swo
 .DS_Store
 
-# Testing
+# Testing & Coverage
 .coverage
 htmlcov/
 .pytest_cache/
@@ -52,10 +55,8 @@ coverage.xml
 docs/_build/
 site/
 
-# Distribution
-dist/
-build/
-*.egg-info/
-
 # Internal documentation (not for public release)
 internal_docs/
+
+# Always include scripts
+!scripts/
