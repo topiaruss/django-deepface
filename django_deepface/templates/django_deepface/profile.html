@@ -46,7 +46,7 @@
     <!-- Upload form -->
     {% if face_images|length < 4 %} <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Upload New Face Image</h5>
+            <h5 class="card-title">Upload A Clear Face Image</h5>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
@@ -54,13 +54,6 @@
             </form>
         </div>
 </div>
-{% else %}
-<div class="alert alert-info">
-    You have reached the maximum number of face images (4).
-</div>
-{% endif %}
-</div>
-
 <!-- Webcam capture -->
 <div class="card mt-4">
     <div class="card-body">
@@ -84,6 +77,18 @@
         </div>
     </div>
 </div>
+
+{% else %}
+<div class="alert alert-info">
+    You have reached the maximum number of face images (4).
+</div>
+{% endif %}
+
+
+
+
+</div>
+
 
 {% block extra_js %}
 <script>

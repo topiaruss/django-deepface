@@ -84,7 +84,6 @@ class FaceImageUploadForm(forms.ModelForm):
         validators=[
             FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"])
         ],
-        help_text="Upload a clear face image",
     )
 
     class Meta:
