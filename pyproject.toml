@@ -15,8 +15,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-deepface"
-version = "0.0.6"
-description = "Django app for face recognition authentication using DeepFace"
+version = "0.0.7"
+description = "A Django app for face recognition authentication using DeepFace and pgvector"
 readme = "README.md"
 requires-python = ">=3.9,<3.12" # waiting for tensorflow library update
 license = {text = "MIT"}
